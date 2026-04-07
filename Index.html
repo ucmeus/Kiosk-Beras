@@ -1,0 +1,2945 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kiosk Beras - H.Nana Beras</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rice: {
+              50: '#f7f3eb',
+              100: '#e9f0db',
+              700: '#3f6b2a'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    :root {
+      --bg: #f7f3eb;
+      --panel: #ffffff;
+      --panel-soft: #f2eee5;
+      --ink: #26311d;
+      --ink-soft: #5c664f;
+      --line: #d8ceb7;
+      --brand: #3f6b2a;
+      --brand-2: #e9f0db;
+      --warn: #cf7b00;
+      --danger: #b33a3a;
+      --success: #2f7d4f;
+      --shadow: 0 12px 30px rgba(58, 42, 17, 0.08);
+      --radius: 14px;
+      --drive-bg-image: url('https://drive.google.com/thumbnail?id=1bPA4BUlH8jBPdj2H79L_aVd4fJwTl4ZS');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito Sans', sans-serif;
+      color: var(--ink);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 0 0, rgba(254, 245, 218, .92) 0, transparent 35%),
+        radial-gradient(circle at 95% 5%, rgba(232, 240, 214, .9) 0, transparent 30%),
+        linear-gradient(130deg, rgba(247, 243, 235, .9), rgba(241, 237, 227, .9)),
+        var(--drive-bg-image);
+      background-size: auto, auto, cover, cover;
+      background-position: 0 0, 95% 5%, center, center;
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+      background-attachment: fixed, fixed, fixed, fixed;
+      min-height: 100vh;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 286px 1fr;
+      min-height: 100vh;
+    }
+
+    .app-shell.sidebar-hidden {
+      grid-template-columns: 0 1fr;
+    }
+
+    .app-shell.sidebar-hidden .sidebar {
+      display: none;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: linear-gradient(180deg, #faf7f0 0%, #f1ede3 100%);
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .brand {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 8px;
+    }
+
+    .brand-logo {
+      width: 74px;
+      height: 74px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #3f6b2a, #7ea144);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: .8px;
+      margin: 0 auto 2px;
+      overflow: hidden;
+      border: 1px solid #dfe8d1;
+      box-shadow: 0 10px 20px rgba(63, 107, 42, 0.12);
+    }
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+
+    .brand-name {
+      font-family: 'DM Serif Text', serif;
+      font-size: 18px;
+      line-height: 1.2;
+      margin: 0;
+      text-align: center;
+    }
+
+    .brand-address {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .menu-block {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: var(--panel);
+      overflow: auto;
+    }
+
+    .menu-item,
+    .submenu-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--ink);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s ease;
+      display: block;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .menu-item {
+      position: relative;
+    }
+
+    .submenu-item {
+      padding-left: 28px;
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    .menu-dropdown {
+      margin: 6px 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .menu-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 800;
+      color: #516644;
+      width: 100%;
+    }
+
+    .menu-dropdown-toggle::after {
+      content: '▾';
+      font-size: 12px;
+      transition: transform .2s ease;
+      opacity: .7;
+    }
+
+    .menu-dropdown.open .menu-dropdown-toggle::after {
+      transform: rotate(180deg);
+    }
+
+    .menu-dropdown-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .22s ease;
+    }
+
+    .menu-dropdown.open .menu-dropdown-body {
+      max-height: 400px;
+    }
+
+    .menu-item:hover,
+    .submenu-item:hover {
+      background: var(--panel-soft);
+    }
+
+    .menu-item.active,
+    .submenu-item.active {
+      background: var(--brand-2);
+      color: #2c4b1d;
+      box-shadow: inset 4px 0 0 #5d8f39;
+    }
+
+    .menu-hidden {
+      display: none !important;
+    }
+
+    .menu-dropdown-hidden {
+      display: none !important;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      padding: 14px 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 15;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .topbar-left .search-wrap {
+      flex: 1;
+    }
+
+    .icon-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      width: 42px;
+      height: 42px;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      color: #3a5a27;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 14px;
+      min-height: 42px;
+    }
+
+    .search-input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .select {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-family: inherit;
+      color: var(--ink);
+      background: #fff;
+      font-weight: 700;
+      min-width: 140px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      position: relative;
+    }
+
+    .profile-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #f4efe4;
+      background: #eff3e8;
+    }
+
+    .profile-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding-right: 8px;
+    }
+
+    .profile-text strong {
+      font-size: 12px;
+    }
+
+    .profile-text span {
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    .profile-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 210px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 6px;
+      display: none;
+      z-index: 40;
+    }
+
+    .profile-menu.open {
+      display: block;
+    }
+
+    .profile-menu button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      padding: 10px;
+      border-radius: 10px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .profile-menu button:hover {
+      background: var(--panel-soft);
+    }
+
+    .content {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+      font-family: 'DM Serif Text', serif;
+      color: #2f4323;
+    }
+
+    .muted {
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: #4d7f34;
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #efe8d8;
+      color: #554622;
+    }
+
+    .btn-danger {
+      background: #fbe5e5;
+      color: #a63535;
+    }
+
+    .btn-small {
+      padding: 6px 9px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .btn[disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: linear-gradient(160deg, #fff, #f8f4ea);
+    }
+
+    .metric span {
+      font-size: 12px;
+      color: var(--ink-soft);
+      font-weight: 700;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 22px;
+      color: #2f4323;
+    }
+
+    .metric.large strong {
+      font-size: 28px;
+    }
+
+    .split-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .alerts {
+      display: grid;
+      gap: 8px;
+    }
+
+    .alert {
+      border: 1px solid var(--line);
+      border-left: 5px solid #7d9f58;
+      border-radius: 12px;
+      background: #fff;
+      padding: 11px;
+    }
+
+    .alert.warning { border-left-color: var(--warn); }
+    .alert.info { border-left-color: #2175a8; }
+    .alert.success { border-left-color: var(--success); }
+
+    .page {
+      display: none;
+      animation: fadeIn .26s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+      background: #fff;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee5d5;
+      text-align: left;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #fbf8f2;
+      font-size: 12px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #657453;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #edf4e2;
+      color: #43652d;
+    }
+
+    .chip.pending { background: #ffefdd; color: #915a12; }
+    .chip.approved { background: #deefd8; color: #2c703d; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: var(--ink-soft);
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+
+    .numeric-input {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .numeric-input::placeholder {
+      color: #8d9980;
+      opacity: 1;
+    }
+
+    .field textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 33, 20, .48);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 60;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(860px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .close-btn {
+      border: none;
+      background: #f7f2e8;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 11px;
+    }
+
+    .product {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      display: grid;
+      grid-template-rows: 130px auto;
+    }
+
+    .product img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      background: #e6ebdc;
+    }
+
+    .product-body {
+      padding: 10px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+
+    .trx-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .trx-unit {
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      min-height: 36px;
+      padding: 0 8px;
+      font-family: inherit;
+      font-weight: 700;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .trx-qty {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cashier-total {
+      position: sticky;
+      bottom: 0;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.88), #fff);
+      padding: 12px;
+      margin: 0 -16px -16px;
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
+
+    .cashier-total-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .flash {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      max-width: 340px;
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 13px;
+      background: #203319;
+      color: #fff;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: all .25s ease;
+      z-index: 80;
+    }
+
+    .flash.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media print {
+      .sidebar, .topbar, .flash, .profile, .menu-block, .search-wrap, .icon-btn, .btn, .select, .submenu-item, .menu-item, .profile-menu, .modal, .hidden {
+        display: none !important;
+      }
+      .main {
+        padding: 0;
+      }
+      .content {
+        gap: 0;
+      }
+      .card {
+        border: none;
+        box-shadow: none;
+      }
+      .table-wrap {
+        overflow: visible;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        linear-gradient(180deg, rgba(28, 38, 22, 0.2), rgba(28, 38, 22, 0.6)),
+        var(--drive-bg-image);
+      background-size: cover;
+      background-position: center;
+      animation: paddyPan 26s ease-in-out infinite alternate;
+    }
+
+    .login-card {
+      width: min(460px, 100%);
+      background: rgba(255, 255, 255, 0.64);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      animation: cardRise .45s ease;
+    }
+
+    .captcha-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #faf7f0;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 10px;
+    }
+
+    @keyframes paddyPan {
+      from { background-position: center; }
+      to { background-position: center 12%; }
+    }
+
+    @keyframes cardRise {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .grid-4,
+      .cashier-total-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .split-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 880px) {
+      body {
+        background-attachment: scroll, scroll, scroll, scroll;
+      }
+
+      .brand-logo {
+        width: 64px;
+        height: 64px;
+      }
+
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        max-height: 55vh;
+        overflow: auto;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .form-grid,
+      .cashier-total-grid,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .trx-row {
+        grid-template-columns: 1fr;
+      }
+
+      .content {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-screen flex items-center justify-center" id="loginScreen">
+    <div class="login-card shadow-2xl ring-1 ring-white/50">
+      <h2 class="card-title text-center mb-2">Login Kiosk Beras H.Encang</h2>
+      <p class="muted text-center mb-3">Masuk menggunakan username, password, dan CAPTCHA.</p>
+      <form id="loginForm" class="form-grid">
+        <div class="field full">
+          <label for="loginUsername">Username</label>
+          <input id="loginUsername" name="username" required autocomplete="username" placeholder="Masukkan username">
+        </div>
+        <div class="field full">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" required autocomplete="current-password" placeholder="Masukkan password">
+        </div>
+        <div class="field">
+          <label>Input CAPTCHA</label>
+          <input name="captchaAnswer" required autocomplete="off" placeholder="Masukkan kombinasi huruf & angka">
+        </div>
+        <div class="field">
+          <label>Kode CAPTCHA</label>
+          <div class="captcha-box">
+            <strong id="captchaQuestion">-</strong>
+            <button type="button" class="btn btn-secondary btn-small" id="refreshCaptchaBtn">Refresh</button>
+          </div>
+        </div>
+        <div class="field full">
+          <button type="submit" class="btn btn-primary">Masuk Username/Password</button>
+        </div>
+        <div class="field full">
+          <button type="button" class="btn btn-secondary" id="googleLoginBtn">Masuk dengan Akun Google</button>
+        </div>
+      </form>
+      <p class="muted text-center mt-2">For Demo only: admin/admin123, supervisor/supervisor123, kasir/kasir123</p>
+    </div>
+  </div>
+
+  <div class="app-shell hidden bg-rice-50" id="appShell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo" id="brandLogo">HEB</div>
+        <h1 class="brand-name" id="brandName">Kiosk Beras - H.Encang</h1>
+        <p class="brand-address" id="brandAddress">-</p>
+      </div>
+
+      <nav class="menu-block" id="sidebarMenu">
+        <button class="menu-item active" data-menu="dashboard" data-page="dashboard">Dashboard</button>
+
+        <div class="menu-dropdown open" data-submenu-group="master">
+          <button class="menu-item menu-dropdown-toggle" data-toggle-submenu="master">Master Data</button>
+          <div class="menu-dropdown-body">
+            <button class="submenu-item" data-menu="suppliers" data-page="suppliers">Supplier</button>
+            <button class="submenu-item" data-menu="categories" data-page="categories">Kategori Beras</button>
+            <button class="submenu-item" data-menu="customers" data-page="customers">Pelanggan</button>
+            <button class="submenu-item" data-menu="users" data-page="users">Manajemen User</button>
+          </div>
+        </div>
+
+        <div class="menu-dropdown open" data-submenu-group="finance">
+          <button class="menu-item menu-dropdown-toggle" data-toggle-submenu="finance">Keuangan</button>
+          <div class="menu-dropdown-body">
+            <button class="submenu-item" data-menu="balances" data-page="balances">Saldo Awal/Akhir</button>
+            <button class="submenu-item" data-menu="cashflow" data-page="cashflow">Cash Flow</button>
+          </div>
+        </div>
+
+        <div class="menu-dropdown open" data-submenu-group="inventory">
+          <button class="menu-item menu-dropdown-toggle" data-toggle-submenu="inventory">Inventory</button>
+          <div class="menu-dropdown-body">
+            <button class="submenu-item" data-menu="stock" data-page="stock">Stok Beras</button>
+            <button class="submenu-item" data-menu="purchases" data-page="purchases">Pembelian Beras</button>
+          </div>
+        </div>
+
+        <button class="menu-item" data-menu="transactions" data-page="transactions">Transaksi</button>
+
+        <div class="menu-dropdown open" data-submenu-group="report">
+          <button class="menu-item menu-dropdown-toggle" data-toggle-submenu="report">Laporan</button>
+          <div class="menu-dropdown-body">
+            <button class="submenu-item" data-menu="report_daily" data-page="reports" data-period="daily">Harian</button>
+            <button class="submenu-item" data-menu="report_weekly" data-page="reports" data-period="weekly">Mingguan</button>
+            <button class="submenu-item" data-menu="report_monthly" data-page="reports" data-period="monthly">Bulanan</button>
+          </div>
+        </div>
+
+        <button class="menu-item" data-menu="backups" data-page="backups">Backup/Restore</button>
+        <button class="menu-item" data-menu="settings" data-page="settings">Setting</button>
+        <button class="menu-item" data-menu="about" data-page="about">About Me</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar border-b border-rice-100">
+        <div class="topbar-left">
+          <button class="icon-btn" id="toggleSidebarBtn" title="Tampilkan/Sembunyikan Menu">☰</button>
+          <div class="search-wrap">
+            <input id="globalSearch" class="search-input" type="text" placeholder="Cari kategori beras, supplier, pelanggan, dll">
+          </div>
+        </div>
+
+        <div class="top-right">
+          <select class="select" id="roleSelect"></select>
+          <div class="profile" id="profileBox">
+            <img id="profileAvatar" class="profile-avatar" alt="avatar" src="https://drive.google.com/thumbnail?id=1r0P-k0nrmhJjwSLNDiwa3P6DZXnQmlUS">
+            <div class="profile-text">
+              <strong id="profileName">-</strong>
+              <span id="profileRole">Admin</span>
+            </div>
+            <div class="profile-menu" id="profileMenu">
+              <button type="button" data-profile-action="detail">Detail Admin</button>
+              <button type="button" data-profile-action="edit">Edit Profil</button>
+              <button type="button" data-profile-action="logout">Logout</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content" id="contentRoot">
+        <section class="page active" id="page-dashboard">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Dashboard Penjualan</h2>
+              <span class="muted" id="dashboardTime">-</span>
+            </div>
+            <div class="grid-4">
+              <div class="metric"><span>Jumlah Pelanggan</span><strong id="metricCustomers">0</strong></div>
+              <div class="metric"><span>Jumlah Supplier</span><strong id="metricSuppliers">0</strong></div>
+              <div class="metric"><span>Penjualan Hari Ini</span><strong id="metricTodaySales">Rp 0</strong></div>
+              <div class="metric"><span>Profit Hari Ini</span><strong id="metricTodayProfit">Rp 0</strong></div>
+            </div>
+            <div class="grid-4 mt-3">
+              <div class="metric"><span>Transaksi Hari Ini</span><strong id="metricTodayTransactions">0</strong></div>
+              <div class="metric"><span>Target Harian</span><strong id="metricDailyTarget">Rp 0</strong></div>
+              <div class="metric"><span>Progress Target</span><strong id="metricTargetProgress">0%</strong></div>
+              <div class="metric"><span>Total Kategori</span><strong id="metricTotalCategories">0</strong></div>
+            </div>
+          </div>
+
+          <div class="split-2">
+            <div class="card">
+              <div class="card-head">
+                <h3 class="card-title">Grafik Batang Penjualan</h3>
+                <span class="muted">Per kategori beras</span>
+              </div>
+              <div id="barChart" class="h-300"></div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <h3 class="card-title">Grafik Garis Trend</h3>
+                <span class="muted">7 hari terakhir</span>
+              </div>
+              <div id="lineChart" class="h-300"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3 class="card-title">Grafik Profit</h3>
+              <span class="muted">Laba harian aktual berdasarkan transaksi</span>
+            </div>
+            <div id="profitChart" class="h-300"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3 class="card-title">Alert</h3>
+              <span class="muted">Notifikasi stok rendah dan target</span>
+            </div>
+            <div class="alerts" id="alertsList"></div>
+          </div>
+        </section>
+
+        <section class="page" id="page-suppliers">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Master Supplier</h2>
+              <button class="btn btn-primary" data-op="create" data-module="suppliers" data-action="create">Tambah Supplier</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nama</th><th>Telepon</th><th>Alamat</th><th>Catatan</th><th>Aksi</th></tr></thead>
+                <tbody id="tableSuppliers"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-categories">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Kategori Beras</h2>
+              <button class="btn btn-primary" data-op="create" data-module="categories" data-action="create">Tambah Kategori</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Gambar</th><th>Nama</th><th>Harga/Liter</th><th>Harga/Kg</th><th>Modal/Liter</th><th>Modal/Kg</th><th>Stok</th><th>Supplier</th><th>Aksi</th></tr></thead>
+                <tbody id="tableCategories"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-customers">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Data Pelanggan</h2>
+              <button class="btn btn-primary" data-op="create" data-module="customers" data-action="create">Tambah Pelanggan</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nama</th><th>Telepon</th><th>Alamat</th><th>Diskon</th><th>Aksi</th></tr></thead>
+                <tbody id="tableCustomers"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-users">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Manajemen User</h2>
+              <button class="btn btn-primary" data-op="create" data-module="users" data-action="create">Tambah User</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Username</th><th>Nama</th><th>Email</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="tableUsers"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-balances">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Saldo Awal / Akhir</h2>
+              <button class="btn btn-primary" data-op="create" data-module="balances" data-action="create">Tambah Saldo</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Tanggal</th><th>Saldo Awal</th><th>Saldo Akhir</th><th>Catatan</th><th>Aksi</th></tr></thead>
+                <tbody id="tableBalances"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-cashflow">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Cash Flow</h2>
+              <button class="btn btn-primary" data-op="create" data-module="cashflow" data-action="create">Tambah Cash Flow</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Tanggal</th><th>Tipe</th><th>Sumber</th><th>Jumlah</th><th>Deskripsi</th><th>Aksi</th></tr></thead>
+                <tbody id="tableCashflow"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-stock">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Stok Beras</h2>
+              <span class="muted">Monitoring level stok setiap kategori</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Kategori</th><th>Stok Saat Ini</th><th>Minimal</th><th>Status</th></tr></thead>
+                <tbody id="tableStock"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-purchases">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Pembelian Beras</h2>
+              <button class="btn btn-primary" data-op="create" data-module="purchases" data-action="create">Tambah Pembelian</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Tanggal</th><th>Supplier</th><th>Kategori</th><th>Qty (Kg)</th><th>Harga Beli</th><th>Total</th><th>Aksi</th></tr></thead>
+                <tbody id="tablePurchases"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-transactions">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Transaksi Kasir</h2>
+              <span class="muted">Kasir cukup input kuantitas dan uang dibayar</span>
+            </div>
+            <div class="form-grid mb-3">
+              <div class="field">
+                <label>Pelanggan</label>
+                <select id="trxCustomer"></select>
+              </div>
+              <div class="field">
+                <label>Uang Dibayar</label>
+                <input id="trxPaid" type="text" data-number-kind="currency" class="numeric-input" inputmode="numeric" placeholder="Contoh: 150.000">
+              </div>
+            </div>
+
+            <div class="cashier-total cashier-summary">
+              <div class="cashier-total-grid">
+                <div class="metric large"><span>Subtotal</span><strong id="trxSubtotal">Rp 0</strong></div>
+                <div class="metric large"><span>Diskon</span><strong id="trxDiscount">Rp 0</strong></div>
+                <div class="metric large"><span>Total</span><strong id="trxTotal">Rp 0</strong></div>
+                <div class="metric large"><span>Kembalian</span><strong id="trxChange">Rp 0</strong></div>
+              </div>
+              <button id="saveTransactionBtn" class="btn btn-primary" data-action="create">Simpan Transaksi</button>
+            </div>
+
+            <div class="catalog" id="productCatalog"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3 class="card-title">Riwayat Transaksi</h3>
+              <span class="muted">Daftar transaksi terbaru</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Tanggal</th><th>Pelanggan</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="tableTransactions"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-reports">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Laporan</h2>
+              <div class="report-actions">
+                <button class="btn btn-secondary" onclick="printReport()">Cetak Laporan</button>
+                <button class="btn btn-secondary" data-op="report" data-period="daily">Harian</button>
+                <button class="btn btn-secondary" data-op="report" data-period="weekly">Mingguan</button>
+                <button class="btn btn-secondary" data-op="report" data-period="monthly">Bulanan</button>
+                <select id="reportUnitSelect" class="select wide-select">
+                  <option value="kg" selected>Satuan: Kg</option>
+                  <option value="liter">Satuan: Liter</option>
+                </select>
+              </div>
+            </div>
+            <p class="muted" id="reportRange">-</p>
+            <div class="grid-4 mb-3">
+              <div class="metric"><span>Total Penjualan</span><strong id="reportSales">Rp 0</strong></div>
+              <div class="metric"><span>Total Profit</span><strong id="reportProfit">Rp 0</strong></div>
+              <div class="metric"><span>Total Transaksi</span><strong id="reportTransactions">0</strong></div>
+              <div class="metric"><span>Total Kuantitas</span><strong id="reportQty">0 kg</strong></div>
+              <div class="metric"><span>Periode</span><strong id="reportPeriod">-</strong></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Kategori</th><th>Total Qty</th><th>Unit</th><th>Total Penjualan</th></tr></thead>
+                <tbody id="tableTopCategories"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-backups">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Backup / Restore Data</h2>
+              <div class="button-row">
+                <button class="btn btn-primary" id="manualBackupBtn" data-action="create">Backup Manual</button>
+                <button class="btn btn-secondary" id="setupAutoBackupBtn" data-action="create">Aktifkan Auto Backup Tahunan</button>
+              </div>
+            </div>
+            <p class="muted">Backup otomatis dijalankan 1 tahun sekali (dengan trigger pengecekan harian).</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Waktu</th><th>Mode</th><th>Pembuat</th><th>Link File</th><th>Catatan</th><th>Aksi</th></tr></thead>
+                <tbody id="tableBackups"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-settings">
+          <div class="card">
+            <div class="card-head">
+              <h2 class="card-title">Setting Toko</h2>
+              <span class="muted">Nama toko, alamat, pemilik, dan target</span>
+            </div>
+            <form id="settingsForm" class="form-grid">
+              <div class="field">
+                <label>Nama Toko</label>
+                <input name="storeName" required>
+              </div>
+              <div class="field">
+                <label>URL Image Logo / drive:nama-file.jpg / driveid:FILE_ID</label>
+                <input name="logoUrl" placeholder="https://... atau drive:logo-toko.png atau driveid:19FSpFBYLKTEdowZDZfvc_oFKFZvjKVvy">
+              </div>
+              <div class="field full">
+                <label>Alamat Toko</label>
+                <textarea name="storeAddress" required></textarea>
+              </div>
+              <div class="field">
+                <label>Nama Pemilik</label>
+                <input name="ownerName" required>
+              </div>
+              <div class="field">
+                <label>Nomor Pemilik</label>
+                <input name="ownerPhone" required>
+              </div>
+              <div class="field">
+                <label>Nama Bank</label>
+                <input name="bankName">
+              </div>
+              <div class="field">
+                <label>Nomor Rekening Toko</label>
+                <input name="bankAccountNumber">
+              </div>
+              <div class="field">
+                <label>Target Penjualan Harian</label>
+                <input name="dailySalesTarget" type="text" data-number-kind="currency" class="numeric-input" inputmode="numeric" placeholder="Contoh: 5.000.000">
+              </div>
+              <div class="field full flex-row-gap-align">
+                <button type="submit" class="btn btn-primary" data-action="edit">Simpan Setting</button>
+                <button type="button" class="btn btn-danger" id="deleteSettingBtn" data-action="delete">Hapus Setting</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section class="page" id="page-about">
+          <div class="card">
+            <h2 class="card-title">About Me</h2>
+            <p class="text-lg">Aplikasi ini dibuat oleh <strong>u.c.m.e</strong> | a simple work.</p>
+            <p class="muted">Sistem ini dirancang sebagai pusat kontrol utama kasir beras terintegrasi dalam satu halaman untuk memudahkan monitoring dan operasional harian toko.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="entityModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 class="card-title" id="entityModalTitle">Form</h3>
+        <button type="button" class="close-btn" data-close="entityModal">x</button>
+      </div>
+      <form id="entityForm">
+        <input type="hidden" name="id">
+        <input type="hidden" name="module">
+        <div class="form-grid" id="entityFields"></div>
+        <div class="button-row-end">
+          <button type="button" class="btn btn-secondary" data-close="entityModal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="historyModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 class="card-title" id="historyTitle">Riwayat Pelanggan</h3>
+        <button type="button" class="close-btn" data-close="historyModal">x</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Kasir</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="profileModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 class="card-title" id="profileModalTitle">Profil Admin</h3>
+        <button type="button" class="close-btn" data-close="profileModal">x</button>
+      </div>
+      <form id="profileForm" class="form-grid">
+        <input type="hidden" name="id">
+        <div class="field"><label>Nama</label><input name="displayName" required></div>
+        <div class="field"><label>Email</label><input name="email" type="email"></div>
+        <div class="field"><label>Password Baru</label><input name="password" type="password" placeholder="Kosongkan jika tidak ingin mengubah password"></div>
+        <div class="field full"><label>URL Avatar / Link Drive / File ID</label><input name="avatarUrl" placeholder="https://... atau https://drive.google.com/file/d/... atau FILE_ID"></div>
+        <div class="field full button-row-end">
+          <button type="submit" class="btn btn-primary">Simpan Profil</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="flash" id="flashMessage"></div>
+
+  <script>
+    const state = {
+      authenticated: false,
+      role: 'Admin',
+      userRole: 'Guest',
+      captchaToken: '',
+      pendingRestorePage: '',
+      roles: [],
+      permissions: {},
+      menuAccess: {},
+      currentUser: null,
+      datasets: {
+        backups: [],
+        suppliers: [],
+        categories: [],
+        customers: [],
+        balances: [],
+        cashflow: [],
+        purchases: [],
+        transactions: [],
+        settings: {}
+      },
+      dashboard: {},
+      alerts: [],
+      activePage: 'dashboard',
+      reportPeriod: 'daily',
+      reportUnit: 'kg',
+      storageEngine: 'SHEETS'
+    };
+
+    const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+    let idleTimer = null;
+    const DEFAULT_BRAND_LOGO_URL = 'https://drive.google.com/thumbnail?id=19FSpFBYLKTEdowZDZf13KKAZV5ppUvKd0OvW68jBreh221NbqbX';
+    const DEFAULT_PROFILE_AVATAR_URL = 'https://drive.google.com/thumbnail?id=1r0P-k0nrmhJjwSLNDiwa3P6DZXnQmlUS';
+    const DEFAULT_CATEGORY_IMAGE_URL = 'https://drive.google.com/thumbnail?id=1qvikPoHcav1pPPSvaBVwLaw2C9FBiGfM';
+
+    const formConfigs = {
+      suppliers: {
+        title: 'Supplier',
+        fields: [
+          { name: 'name', label: 'Nama Supplier', type: 'text', required: true },
+          { name: 'phone', label: 'Telepon', type: 'text' },
+          { name: 'address', label: 'Alamat', type: 'textarea', full: true },
+          { name: 'notes', label: 'Catatan', type: 'textarea', full: true }
+        ]
+      },
+      categories: {
+        title: 'Kategori Beras',
+        fields: [
+          { name: 'name', label: 'Nama Kategori', type: 'text', required: true },
+          { name: 'supplierId', label: 'Supplier', type: 'select', source: 'suppliers', textKey: 'name', valueKey: 'id' },
+          { name: 'pricePerLiter', label: 'Harga Jual / Liter', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 14.500' },
+          { name: 'costPerLiter', label: 'Modal / Liter', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 12.800' },
+          { name: 'pricePerKg', label: 'Harga Jual / Kg', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 18.000' },
+          { name: 'costPerKg', label: 'Modal / Kg', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 16.000' },
+          { name: 'kgPerLiter', label: 'Konversi Kg per Liter', type: 'number', min: 0.1, step: 0.01, numberKind: 'decimal', placeholder: 'Contoh: 0,80' },
+          { name: 'stockKg', label: 'Stok (Kg)', type: 'number', min: 0, step: 0.1, numberKind: 'decimal', placeholder: 'Contoh: 250,50' },
+          { name: 'reorderLevel', label: 'Batas Minimum Stok', type: 'number', min: 0, step: 0.1, numberKind: 'decimal', placeholder: 'Contoh: 40,00' },
+          { name: 'imageUrl', label: 'URL Gambar', type: 'text', full: true, placeholder: 'https://... atau link Google Drive atau FILE_ID' },
+          { name: 'description', label: 'Deskripsi', type: 'textarea', full: true }
+        ]
+      },
+      customers: {
+        title: 'Pelanggan',
+        fields: [
+          { name: 'name', label: 'Nama Pelanggan', type: 'text', required: true },
+          { name: 'phone', label: 'Telepon', type: 'text' },
+          { name: 'address', label: 'Alamat', type: 'textarea', full: true },
+          { name: 'discountPercent', label: 'Diskon Loyal (%)', type: 'number', min: 0, step: 0.1, numberKind: 'percent', placeholder: 'Contoh: 2,50' }
+        ]
+      },
+      users: {
+        title: 'User',
+        fields: [
+          { name: 'username', label: 'Username', type: 'text', required: true },
+          { name: 'displayName', label: 'Nama Lengkap', type: 'text', required: true },
+          { name: 'email', label: 'Email', type: 'email' },
+          { name: 'role', label: 'Role', type: 'select', options: [
+            { value: 'Admin', label: 'Admin' },
+            { value: 'Supervisor', label: 'Supervisor' },
+            { value: 'Kasir', label: 'Kasir' },
+            { value: 'Guest', label: 'Guest' }
+          ], required: true },
+          { name: 'password', label: 'Password (opsional)', type: 'password' },
+          { name: 'canViewReports', label: 'Dapat Melihat Laporan', type: 'checkbox' },
+          { name: 'canManageUsers', label: 'Dapat Mengelola User', type: 'checkbox' },
+          { name: 'canManageInventory', label: 'Dapat Mengelola Inventori', type: 'checkbox' },
+          { name: 'avatarUrl', label: 'URL Avatar / Link Drive / File ID', type: 'text', full: true, placeholder: 'https://... atau https://drive.google.com/file/d/... atau FILE_ID' },
+          { name: 'isActive', label: 'Status Aktif', type: 'select', options: [
+            { value: 'TRUE', label: 'Aktif' },
+            { value: 'FALSE', label: 'Tidak Aktif' }
+          ] }
+        ]
+      },
+      balances: {
+        title: 'Saldo Awal / Akhir',
+        fields: [
+          { name: 'date', label: 'Tanggal', type: 'date', required: true },
+          { name: 'openingBalance', label: 'Saldo Awal', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 1.000.000' },
+          { name: 'closingBalance', label: 'Saldo Akhir', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 1.350.000' },
+          { name: 'notes', label: 'Catatan', type: 'textarea', full: true }
+        ]
+      },
+      cashflow: {
+        title: 'Cash Flow',
+        fields: [
+          { name: 'date', label: 'Tanggal', type: 'date', required: true },
+          { name: 'type', label: 'Tipe', type: 'select', options: [{ value: 'IN', label: 'IN' }, { value: 'OUT', label: 'OUT' }] },
+          { name: 'amount', label: 'Jumlah', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 750.000' },
+          { name: 'source', label: 'Sumber', type: 'text' },
+          { name: 'description', label: 'Deskripsi', type: 'textarea', full: true }
+        ]
+      },
+      purchases: {
+        title: 'Pembelian Beras',
+        fields: [
+          { name: 'date', label: 'Tanggal', type: 'date', required: true },
+          { name: 'supplierId', label: 'Supplier', type: 'select', source: 'suppliers', textKey: 'name', valueKey: 'id' },
+          { name: 'categoryId', label: 'Kategori Beras', type: 'select', source: 'categories', textKey: 'name', valueKey: 'id' },
+          { name: 'qtyKg', label: 'Qty (Kg)', type: 'number', min: 0, step: 0.1, numberKind: 'decimal', placeholder: 'Contoh: 100,50' },
+          { name: 'buyPrice', label: 'Harga Beli / Kg', type: 'number', min: 0, step: 100, numberKind: 'currency', placeholder: 'Contoh: 13.500' },
+          { name: 'notes', label: 'Catatan', type: 'textarea', full: true }
+        ]
+      }
+    };
+
+    function validatePassword(password) {
+      if (!password || password.trim() === '') return true; // optional
+      if (password.length < 8) return 'Password minimal 8 karakter';
+      if (!/[a-zA-Z]/.test(password)) return 'Password harus mengandung huruf';
+      if (!/\d/.test(password)) return 'Password harus mengandung angka';
+      return true;
+    }
+
+    function init() {
+      google.charts.load('current', { packages: ['corechart'] });
+      bindBaseEvents();
+      bindNumericInputs(document);
+      applySidebarState(getStoredSidebarState());
+      showLoginScreen();
+      refreshCaptcha();
+    }
+
+    function bindBaseEvents() {
+      document.getElementById('sidebarMenu').addEventListener('click', onMenuClick);
+      document.getElementById('contentRoot').addEventListener('click', onContentClick);
+      document.getElementById('loginForm').addEventListener('submit', onSubmitLogin);
+      document.getElementById('googleLoginBtn').addEventListener('click', onGoogleLogin);
+      document.getElementById('refreshCaptchaBtn').addEventListener('click', refreshCaptcha);
+      document.getElementById('toggleSidebarBtn').addEventListener('click', onToggleSidebar);
+      document.getElementById('entityForm').addEventListener('submit', onSubmitEntity);
+      document.getElementById('profileForm').addEventListener('submit', onSubmitProfile);
+      document.getElementById('settingsForm').addEventListener('submit', onSubmitSettings);
+      document.getElementById('roleSelect').addEventListener('change', onRoleChange);
+      document.getElementById('profileBox').addEventListener('click', onProfileClick);
+      document.getElementById('globalSearch').addEventListener('input', onSearch);
+      document.getElementById('reportUnitSelect').addEventListener('change', onReportUnitChange);
+      document.getElementById('trxPaid').addEventListener('input', updateTransactionSummary);
+      document.getElementById('trxPaid').addEventListener('blur', updateTransactionSummary);
+      document.getElementById('trxCustomer').addEventListener('change', updateTransactionSummary);
+      document.getElementById('saveTransactionBtn').addEventListener('click', saveCashierTransaction);
+      document.getElementById('deleteSettingBtn').addEventListener('click', onDeleteSetting);
+      document.getElementById('manualBackupBtn').addEventListener('click', onManualBackup);
+      document.getElementById('setupAutoBackupBtn').addEventListener('click', onSetupAutoBackup);
+
+      document.querySelectorAll('[data-close]').forEach((btn) => {
+        btn.addEventListener('click', () => closeModal(btn.dataset.close));
+      });
+
+      // idle timeout is disabled for this release so users are not automatically logged out
+      // ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach((eventName) => {
+      //   window.addEventListener(eventName, resetIdleTimer, { passive: true });
+      // });
+
+      document.addEventListener('click', (event) => {
+        const profileBox = document.getElementById('profileBox');
+        const profileMenu = document.getElementById('profileMenu');
+        if (!profileBox.contains(event.target)) {
+          profileMenu.classList.remove('open');
+        }
+      });
+    }
+
+    function showLoginScreen(options) {
+      const opts = options || {};
+      if (opts.preservePage) {
+        state.pendingRestorePage = state.activePage;
+      }
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('appShell').classList.add('hidden');
+      document.getElementById('loginForm').reset();
+      state.authenticated = false;
+      clearTimeout(idleTimer);
+    }
+
+    function showAppScreen() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      state.authenticated = true;
+      resetIdleTimer();
+    }
+
+    function onToggleSidebar() {
+      const appShell = document.getElementById('appShell');
+      appShell.classList.toggle('sidebar-hidden');
+      const hidden = appShell.classList.contains('sidebar-hidden');
+      setStoredSidebarState(hidden);
+    }
+
+    function applySidebarState(hidden) {
+      const appShell = document.getElementById('appShell');
+      appShell.classList.toggle('sidebar-hidden', !!hidden);
+    }
+
+    function resetIdleTimer() {
+      // idle timeout disabled; do not auto-lock the app
+      return;
+    }
+
+    function triggerIdleLock() {
+      if (!state.authenticated) return;
+      showLoginScreen({ preservePage: true });
+      refreshCaptcha();
+    }
+
+    async function refreshCaptcha() {
+      try {
+        const data = await serverCall('generateCaptcha');
+        state.captchaToken = data.token;
+        document.getElementById('captchaQuestion').textContent = data.question;
+      } catch (error) {
+        showFlash(error.message || 'Gagal membuat captcha.', true);
+      }
+    }
+
+    async function onSubmitLogin(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = formToObject(form);
+      data.captchaToken = state.captchaToken;
+
+      try {
+        const auth = await serverCall('login', data);
+        await handleLoginSuccess(auth, form);
+      } catch (error) {
+        showFlash(error.message || 'Login gagal.', true);
+        refreshCaptcha();
+      }
+    }
+
+    async function onGoogleLogin() {
+      const form = document.getElementById('loginForm');
+      const data = formToObject(form);
+      data.captchaToken = state.captchaToken;
+
+      try {
+        const auth = await serverCall('loginWithGoogle', data);
+        await handleLoginSuccess(auth, form);
+      } catch (error) {
+        showFlash(error.message || 'Login Google gagal.', true);
+        refreshCaptcha();
+      }
+    }
+
+    async function handleLoginSuccess(auth, form) {
+      state.currentUser = auth.user;
+      state.userRole = auth.role;
+      state.role = auth.role;
+      setStoredUserId(auth.user.id);
+      setStoredRole(auth.role);
+
+      const restorePage = state.pendingRestorePage || getStoredLastPage();
+      state.pendingRestorePage = '';
+      if (restorePage) {
+        state.activePage = restorePage;
+      } else if (auth.role === 'Kasir') {
+        state.activePage = 'transactions';
+      } else {
+        state.activePage = 'dashboard';
+      }
+
+      showAppScreen();
+      form.reset();
+      await loadApp(state.role, state.currentUser.id);
+      showFlash('Login berhasil.');
+    }
+
+    async function loadApp(role, userId) {
+      try {
+        const payload = await serverCall('initializeApp', { role: role, userId: userId });
+        state.role = payload.role;
+        state.userRole = payload.userRole || payload.role;
+        state.roles = payload.roles || [];
+        state.permissions = payload.permissions || {};
+        state.menuAccess = payload.menuAccess || {};
+        state.currentUser = payload.currentUser || null;
+        state.datasets = payload.datasets || state.datasets;
+        state.dashboard = payload.dashboard || {};
+        state.alerts = payload.alerts || [];
+        state.storageEngine = payload.storageEngine || 'SHEETS';
+
+        setStoredRole(state.role);
+        if (state.currentUser && state.currentUser.id) {
+          setStoredUserId(state.currentUser.id);
+        }
+
+        renderShell();
+        renderAllDataTables();
+        renderDashboard();
+        renderTransactionPage();
+        await loadReport(state.reportPeriod, state.reportUnit);
+
+        const preferredPage = state.activePage || (state.role === 'Kasir' ? 'transactions' : 'dashboard');
+        const fallbackPage = state.role === 'Kasir' ? 'transactions' : 'dashboard';
+        setActivePage(canOpenPage(preferredPage) ? preferredPage : fallbackPage);
+      } catch (error) {
+        showFlash(error.message || String(error), true);
+      }
+    }
+
+    function renderShell() {
+      const settings = state.datasets.settings || {};
+      const logoEl = document.getElementById('brandLogo');
+      const logoCandidate = String(settings.logoUrl || '').trim();
+      const isLegacySeedLogo = /images\.unsplash\.com\/photo-1586201375761-83865001e31c/i.test(logoCandidate);
+      const logoSource = (logoCandidate && !isLegacySeedLogo) ? logoCandidate : DEFAULT_BRAND_LOGO_URL;
+      const logoUrl = normalizeImageUrl_(logoSource, 420, DEFAULT_BRAND_LOGO_URL);
+      if (logoUrl) {
+        logoEl.innerHTML = `<img src=\"${escapeAttr(logoUrl)}\" alt=\"Logo\" onerror=\"this.onerror=null;this.src='${escapeAttr(DEFAULT_BRAND_LOGO_URL)}'\">`;
+      } else {
+        const initials = (settings.storeName || 'KB').split(' ').slice(0, 2).map((w) => w.charAt(0)).join('').toUpperCase();
+        logoEl.textContent = initials || 'KB';
+      }
+      document.getElementById('brandName').textContent = settings.storeName || 'Kiosk Beras - H.Nana Beras';
+      document.getElementById('brandAddress').textContent = settings.storeAddress || '-';
+
+      const roleSelect = document.getElementById('roleSelect');
+      const availableRoles = state.userRole === 'Admin' ? (state.roles || ['Admin', 'Supervisor', 'Kasir', 'Guest']) : [state.userRole];
+      roleSelect.innerHTML = availableRoles
+        .map((role) => `<option value="${escapeHtml(role)}">Role: ${escapeHtml(role)}</option>`)
+        .join('');
+      roleSelect.value = state.role;
+      roleSelect.disabled = state.userRole !== 'Admin';
+
+      const user = state.currentUser || {};
+      const avatarEl = document.getElementById('profileAvatar');
+      avatarEl.src = normalizeImageUrl_(user.avatarUrl, 240, DEFAULT_PROFILE_AVATAR_URL);
+      avatarEl.onerror = () => {
+        avatarEl.onerror = null;
+        avatarEl.src = DEFAULT_PROFILE_AVATAR_URL;
+      };
+      document.getElementById('profileName').textContent = user.displayName || user.username || '-';
+      document.getElementById('profileRole').textContent = state.role;
+
+      document.querySelectorAll('[data-menu]').forEach((menu) => {
+        const key = menu.dataset.menu;
+        const visible = state.menuAccess[key] !== false;
+        menu.classList.toggle('menu-hidden', !visible);
+      });
+
+      document.querySelectorAll('[data-submenu-group]').forEach((group) => {
+        const hasVisibleMenu = Array.from(group.querySelectorAll('[data-menu]')).some((item) => !item.classList.contains('menu-hidden'));
+        group.classList.toggle('menu-dropdown-hidden', !hasVisibleMenu);
+      });
+
+      const reportUnitSelect = document.getElementById('reportUnitSelect');
+      if (reportUnitSelect) {
+        reportUnitSelect.value = state.reportUnit || 'kg';
+      }
+
+      applyActionPermissions();
+      fillSettingsForm();
+    }
+
+    function fillSettingsForm() {
+      const form = document.getElementById('settingsForm');
+      const settings = state.datasets.settings || {};
+      form.storeName.value = settings.storeName || '';
+      form.logoUrl.value = settings.logoUrl || '';
+      form.storeAddress.value = settings.storeAddress || '';
+      form.ownerName.value = settings.ownerName || '';
+      form.ownerPhone.value = settings.ownerPhone || '';
+      form.bankName.value = settings.bankName || '';
+      form.bankAccountNumber.value = settings.bankAccountNumber || '';
+      setNumericInputDisplay(form.dailySalesTarget, settings.dailySalesTarget);
+      document.getElementById('deleteSettingBtn').style.display = settings.id ? 'inline-block' : 'none';
+    }
+
+    function renderDashboard() {
+      const d = state.dashboard || {};
+      document.getElementById('metricCustomers').textContent = num(d.totalCustomers || 0);
+      document.getElementById('metricSuppliers').textContent = num(d.totalSuppliers || 0);
+      document.getElementById('metricTodaySales').textContent = money(d.todaySales || 0);
+      document.getElementById('metricTodayProfit').textContent = money(d.todayProfit || 0);
+      document.getElementById('metricTodayTransactions').textContent = num(d.todayTransactions || 0);
+      document.getElementById('metricDailyTarget').textContent = money(d.dailyTarget || 0);
+      document.getElementById('metricTargetProgress').textContent = `${num(d.targetProgress || 0)}%`;
+      document.getElementById('metricTotalCategories').textContent = num(d.totalCategories || 0);
+      document.getElementById('dashboardTime').textContent = 'Update: ' + new Date().toLocaleString('id-ID');
+
+      const alertsEl = document.getElementById('alertsList');
+      alertsEl.innerHTML = (state.alerts || []).map((a) => (
+        `<div class="alert ${escapeHtml(a.level || '')}"><strong>${escapeHtml(a.title || '')}</strong><div class="muted">${escapeHtml(a.message || '')}</div></div>`
+      )).join('');
+
+      google.charts.setOnLoadCallback(drawDashboardCharts);
+    }
+
+    function drawDashboardCharts() {
+      drawBarChart();
+      drawLineChart();
+      drawProfitChart();
+    }
+
+    function drawBarChart() {
+      const rows = [['Kategori', 'Total Penjualan']];
+      (state.dashboard.salesByCategory || []).forEach((item) => rows.push([item.name, Number(item.totalSales)]));
+      if (rows.length === 1) {
+        rows.push(['Belum ada data', 0]);
+      }
+      const data = google.visualization.arrayToDataTable(rows);
+      const chart = new google.visualization.ColumnChart(document.getElementById('barChart'));
+      chart.draw(data, {
+        legend: 'none',
+        colors: ['#628a40'],
+        backgroundColor: 'transparent',
+        chartArea: { left: 55, right: 12, top: 20, bottom: 50 }
+      });
+    }
+
+    function drawLineChart() {
+      const rows = [['Tanggal', 'Penjualan']];
+      (state.dashboard.salesTrend || []).forEach((item) => rows.push([item.date, Number(item.totalSales)]));
+      if (rows.length === 1) {
+        rows.push([new Date().toISOString().slice(0, 10), 0]);
+      }
+      const data = google.visualization.arrayToDataTable(rows);
+      const chart = new google.visualization.LineChart(document.getElementById('lineChart'));
+      chart.draw(data, {
+        legend: 'none',
+        colors: ['#3f6b2a'],
+        backgroundColor: 'transparent',
+        chartArea: { left: 55, right: 12, top: 20, bottom: 50 }
+      });
+    }
+
+    function drawProfitChart() {
+      const rows = [['Tanggal', 'Profit']];
+      (state.dashboard.profitTrend || []).forEach((item) => rows.push([item.date, Number(item.totalProfit)]));
+      if (rows.length === 1) {
+        rows.push([new Date().toISOString().slice(0, 10), 0]);
+      }
+      const data = google.visualization.arrayToDataTable(rows);
+      const chart = new google.visualization.AreaChart(document.getElementById('profitChart'));
+      chart.draw(data, {
+        legend: 'none',
+        colors: ['#b97b2f'],
+        backgroundColor: 'transparent',
+        chartArea: { left: 55, right: 12, top: 20, bottom: 50 }
+      });
+    }
+    function renderAllDataTables() {
+      renderBackups();
+      renderSuppliers();
+      renderCategories();
+      renderCustomers();
+      renderUsers();
+      renderBalances();
+      renderCashflow();
+      renderStock();
+      renderPurchases();
+      renderTransactionsTable();
+    }
+
+    function renderSuppliers() {
+      const rows = (state.datasets.suppliers || []).map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.name || '')}</td>
+          <td>${escapeHtml(row.phone || '')}</td>
+          <td>${escapeHtml(row.address || '')}</td>
+          <td>${escapeHtml(row.notes || '')}</td>
+          <td>${actionButtons('suppliers', row.id)}</td>
+        </tr>`;
+      }).join('');
+      setTable('tableSuppliers', rows);
+    }
+
+    function renderBackups() {
+      const canRestore = canAction('edit', 'backups');
+      const rows = (state.datasets.backups || []).slice().reverse().map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.timestamp || '')}</td>
+          <td><span class="chip">${escapeHtml(row.mode || '-')}</span></td>
+          <td>${escapeHtml(row.triggeredBy || '-')}</td>
+          <td>${row.fileUrl ? `<a href="${escapeAttr(row.fileUrl)}" target="_blank" rel="noopener">Buka File</a>` : '-'}</td>
+          <td>${escapeHtml(row.notes || '-')}</td>
+          <td>${canRestore ? `<button class="btn btn-secondary btn-small" data-op="restore-backup" data-id="${escapeAttr(row.id)}">Restore</button>` : '-'}</td>
+        </tr>`;
+      }).join('');
+      setTable('tableBackups', rows);
+    }
+
+    function renderCategories() {
+      const supplierMap = mapById(state.datasets.suppliers);
+      const rows = (state.datasets.categories || []).map((row) => {
+        const supplier = supplierMap[row.supplierId] ? supplierMap[row.supplierId].name : '-';
+        const imageUrl = normalizeImageUrl_(row.imageUrl, 360, DEFAULT_CATEGORY_IMAGE_URL);
+        return `<tr data-search="${searchBlob(row)} ${escapeHtml(supplier)}">
+          <td><img src="${escapeAttr(imageUrl)}" onerror="this.onerror=null;this.src='${escapeAttr(DEFAULT_CATEGORY_IMAGE_URL)}'" class="category-thumb"></td>
+          <td>${escapeHtml(row.name || '')}</td>
+          <td>${money(row.pricePerLiter)}</td>
+          <td>${money(row.pricePerKg)}</td>
+          <td>${money(row.costPerLiter)}</td>
+          <td>${money(row.costPerKg)}</td>
+          <td>${num(row.stockKg)} kg</td>
+          <td>${escapeHtml(supplier)}</td>
+          <td>${actionButtons('categories', row.id)}</td>
+        </tr>`;
+      }).join('');
+      setTable('tableCategories', rows);
+    }
+
+    function renderCustomers() {
+      const rows = (state.datasets.customers || []).map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.name || '')}</td>
+          <td>${escapeHtml(row.phone || '')}</td>
+          <td>${escapeHtml(row.address || '')}</td>
+          <td>${num(row.discountPercent || 0)}%</td>
+          <td>
+            ${actionButtons('customers', row.id)}
+            <button class="btn btn-secondary btn-small" data-op="history" data-id="${escapeAttr(row.id)}">Riwayat</button>
+          </td>
+        </tr>`;
+      }).join('');
+      setTable('tableCustomers', rows);
+    }
+
+    function renderUsers() {
+      const rows = (state.datasets.users || []).map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.username || '')}</td>
+          <td>${escapeHtml(row.displayName || '')}</td>
+          <td>${escapeHtml(row.email || '')}</td>
+          <td>${escapeHtml(row.role || '')}</td>
+          <td><span class="chip ${String(row.isActive || '').toUpperCase() === 'TRUE' ? 'approved' : 'pending'}">${String(row.isActive || '').toUpperCase() === 'TRUE' ? 'Aktif' : 'Nonaktif'}</span></td>
+          <td>${actionButtons('users', row.id)}</td>
+        </tr>`;
+      }).join('');
+      setTable('tableUsers', rows);
+    }
+
+    function renderBalances() {
+      const rows = (state.datasets.balances || []).map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.date || '')}</td>
+          <td>${money(row.openingBalance)}</td>
+          <td>${money(row.closingBalance)}</td>
+          <td>${escapeHtml(row.notes || '')}</td>
+          <td>${actionButtons('balances', row.id)}</td>
+        </tr>`;
+      }).join('');
+      setTable('tableBalances', rows);
+    }
+
+    function renderCashflow() {
+      const rows = (state.datasets.cashflow || []).map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.date || '')}</td>
+          <td><span class="chip">${escapeHtml(row.type || '')}</span></td>
+          <td>${escapeHtml(row.source || '')}</td>
+          <td>${money(row.amount)}</td>
+          <td>${escapeHtml(row.description || '')}</td>
+          <td>${actionButtons('cashflow', row.id)}</td>
+        </tr>`;
+      }).join('');
+      setTable('tableCashflow', rows);
+    }
+
+    function renderStock() {
+      const rows = (state.datasets.categories || []).map((row) => {
+        const low = Number(row.stockKg) <= Number(row.reorderLevel || 0);
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.name || '')}</td>
+          <td>${num(row.stockKg)} kg</td>
+          <td>${num(row.reorderLevel)} kg</td>
+          <td><span class="chip ${low ? 'pending' : 'approved'}">${low ? 'Stok Rendah' : 'Aman'}</span></td>
+        </tr>`;
+      }).join('');
+      setTable('tableStock', rows);
+    }
+
+    function renderPurchases() {
+      const rows = (state.datasets.purchases || []).map((row) => {
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.date || '')}</td>
+          <td>${escapeHtml(row.supplierName || '')}</td>
+          <td>${escapeHtml(row.categoryName || '')}</td>
+          <td>${num(row.qtyKg)} kg</td>
+          <td>${money(row.buyPrice)}</td>
+          <td>${money(row.totalCost)}</td>
+          <td>${actionButtons('purchases', row.id)}</td>
+        </tr>`;
+      }).join('');
+      setTable('tablePurchases', rows);
+    }
+
+    function renderTransactionsTable() {
+      const rows = (state.datasets.transactions || []).slice().reverse().map((row) => {
+        const canApprove = canAction('approve', 'transactions') && String(row.status || '').toLowerCase() !== 'approved';
+        const canDelete = canAction('delete', 'transactions');
+        return `<tr data-search="${searchBlob(row)}">
+          <td>${escapeHtml(row.id || '')}</td>
+          <td>${escapeHtml(row.timestamp || row.date || '')}</td>
+          <td>${escapeHtml(row.customerName || 'Umum')}</td>
+          <td>${money(row.total)}</td>
+          <td><span class="chip ${String(row.status || '').toLowerCase() === 'approved' ? 'approved' : 'pending'}">${escapeHtml(row.status || '-')}</span></td>
+          <td>
+            ${canApprove ? `<button class="btn btn-secondary btn-small" data-op="approve" data-id="${escapeAttr(row.id)}">Approve</button>` : ''}
+            ${canDelete ? `<button class="btn btn-danger btn-small" data-op="delete-transaction" data-id="${escapeAttr(row.id)}">Hapus</button>` : ''}
+          </td>
+        </tr>`;
+      }).join('');
+      setTable('tableTransactions', rows);
+    }
+
+    function renderTransactionPage() {
+      const customers = state.datasets.customers || [];
+      const customerSelect = document.getElementById('trxCustomer');
+      customerSelect.innerHTML = `<option value="">Pelanggan Umum (0% diskon)</option>` +
+        customers.map((c) => `<option value="${escapeAttr(c.id)}">${escapeHtml(c.name)} (${num(c.discountPercent || 0)}%)</option>`).join('');
+
+      const cards = (state.datasets.categories || []).map((row) => {
+        const stockKg = Number(row.stockKg || 0);
+        const disabled = stockKg <= 0;
+        const imageUrl = normalizeImageUrl_(row.imageUrl, 820, DEFAULT_CATEGORY_IMAGE_URL);
+        return `<div class="product" data-search="${searchBlob(row)}">
+          <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(row.name || '')}" onerror="this.onerror=null;this.src='${escapeAttr(DEFAULT_CATEGORY_IMAGE_URL)}'">
+          <div class="product-body" data-product-id="${escapeAttr(row.id)}">
+            <strong>${escapeHtml(row.name || '')}</strong>
+            <div class="product-meta">
+              <span class="muted" data-product-price>Harga: ${money(getCategoryPriceByUnit(row, 'liter'))} / liter</span>
+              <span class="muted" data-product-stock>Stok: ${formatStockForUnit(row, 'liter')}</span>
+            </div>
+            <div class="trx-row">
+              <select class="trx-unit" data-id="${escapeAttr(row.id)}" ${disabled ? 'disabled' : ''}>
+                <option value="liter" selected>Liter</option>
+                <option value="kg">Kg</option>
+              </select>
+              <input class="trx-qty numeric-input" type="number" min="0" step="0.01" value="0.00" placeholder="Contoh: 2,50" inputmode="decimal" data-id="${escapeAttr(row.id)}" ${disabled ? 'disabled' : ''}>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      const catalog = document.getElementById('productCatalog');
+      catalog.innerHTML = cards || '<div class="muted">Belum ada kategori beras.</div>';
+      catalog.querySelectorAll('.product-body').forEach((body) => syncProductCardMeta(body));
+      catalog.querySelectorAll('.trx-qty').forEach((input) => input.addEventListener('input', updateTransactionSummary));
+      catalog.querySelectorAll('.trx-unit').forEach((select) => {
+        select.addEventListener('change', (event) => {
+          const body = event.target.closest('.product-body');
+          if (body) {
+            syncProductCardMeta(body);
+          }
+          updateTransactionSummary();
+        });
+      });
+      updateTransactionSummary();
+    }
+
+    function actionButtons(module, id) {
+      const editBtn = canAction('edit', module) ? `<button class="btn btn-secondary btn-small" data-op="edit" data-module="${module}" data-id="${escapeAttr(id)}">Edit</button>` : '';
+      const deleteBtn = canAction('delete', module) ? `<button class="btn btn-danger btn-small" data-op="delete" data-module="${module}" data-id="${escapeAttr(id)}">Hapus</button>` : '';
+      return `${editBtn} ${deleteBtn}`;
+    }
+
+    function setTable(id, rows) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = rows || '<tr><td colspan="99" class="muted">Belum ada data.</td></tr>';
+    }
+
+    function applyActionPermissions() {
+      document.querySelectorAll('[data-action]').forEach((el) => {
+        const action = el.dataset.action;
+        const module = inferModuleFromElement(el);
+        if (!module) return;
+        el.disabled = !canAction(action, module);
+      });
+    }
+
+    function inferModuleFromElement(el) {
+      if (el.dataset.module) return el.dataset.module;
+      if (el.closest('#page-backups')) return 'backups';
+      if (el.closest('#page-settings')) return 'settings';
+      if (el.id === 'saveTransactionBtn') return 'transactions';
+      return null;
+    }
+    function onMenuClick(event) {
+      const toggleBtn = event.target.closest('[data-toggle-submenu]');
+      if (toggleBtn) {
+        const key = toggleBtn.dataset.toggleSubmenu;
+        const group = document.querySelector(`[data-submenu-group="${key}"]`);
+        if (group) {
+          group.classList.toggle('open');
+        }
+        return;
+      }
+
+      const target = event.target.closest('[data-page]');
+      if (!target) return;
+      const menu = target.dataset.menu;
+      if (state.menuAccess[menu] === false) {
+        showFlash('Role ini tidak punya akses ke menu tersebut.', true);
+        return;
+      }
+
+      const page = target.dataset.page;
+      const period = target.dataset.period;
+      if (page === 'reports' && period) {
+        state.reportPeriod = period;
+        loadReport(period, state.reportUnit);
+      }
+      setActivePage(page);
+    }
+
+    function onContentClick(event) {
+      const btn = event.target.closest('[data-op]');
+      if (!btn) return;
+      const op = btn.dataset.op;
+      const module = btn.dataset.module;
+      const id = btn.dataset.id;
+
+      if (op === 'create') {
+        openEntityModal(module);
+      } else if (op === 'edit') {
+        openEntityModal(module, id);
+      } else if (op === 'delete') {
+        removeRecord(module, id);
+      } else if (op === 'history') {
+        openCustomerHistory(id);
+      } else if (op === 'approve') {
+        approveTransaction(id);
+      } else if (op === 'delete-transaction') {
+        removeRecord('transactions', id);
+      } else if (op === 'restore-backup') {
+        onRestoreBackup(id);
+      } else if (op === 'report') {
+        state.reportPeriod = btn.dataset.period || 'daily';
+        loadReport(state.reportPeriod, state.reportUnit);
+        setActivePage('reports');
+      }
+    }
+
+    function setActivePage(page) {
+      state.activePage = page || 'dashboard';
+      setStoredLastPage(state.activePage);
+      document.querySelectorAll('.page').forEach((el) => el.classList.toggle('active', el.id === `page-${state.activePage}`));
+      document.querySelectorAll('#sidebarMenu [data-page]').forEach((el) => {
+        el.classList.toggle('active', el.dataset.page === state.activePage && (!el.dataset.period || el.dataset.period === state.reportPeriod));
+      });
+
+      const activeMenu = Array.from(document.querySelectorAll('#sidebarMenu [data-page]')).find((el) => el.classList.contains('active'));
+      if (activeMenu) {
+        const group = activeMenu.closest('[data-submenu-group]');
+        if (group) {
+          group.classList.add('open');
+        }
+      }
+    }
+
+    function canOpenPage(page) {
+      const map = {
+        dashboard: 'dashboard',
+        suppliers: 'suppliers',
+        categories: 'categories',
+        customers: 'customers',
+        balances: 'balances',
+        cashflow: 'cashflow',
+        stock: 'categories',
+        purchases: 'purchases',
+        users: 'users',
+        transactions: 'transactions',
+        reports: 'reports',
+        backups: 'backups',
+        settings: 'settings',
+        about: 'about'
+      };
+      const module = map[page] || 'dashboard';
+      const viewList = state.permissions.view || [];
+      const allowedModule = viewList.includes('*') || viewList.includes(module);
+      if (!allowedModule) return false;
+
+      if (module === 'reports') {
+        return state.menuAccess.report_daily !== false || state.menuAccess.report_weekly !== false || state.menuAccess.report_monthly !== false;
+      }
+
+      const menuKey = page === 'stock' ? 'stock' : page;
+      return state.menuAccess[menuKey] !== false;
+    }
+
+    function openEntityModal(module, id) {
+      if (!formConfigs[module]) return;
+      const config = formConfigs[module];
+      const modal = document.getElementById('entityModal');
+      const fieldsWrap = document.getElementById('entityFields');
+      const form = document.getElementById('entityForm');
+      const rows = state.datasets[module] || [];
+      const row = rows.find((item) => String(item.id) === String(id)) || {};
+
+      form.reset();
+      form.module.value = module;
+      form.id.value = row.id || '';
+      document.getElementById('entityModalTitle').textContent = (id ? 'Edit ' : 'Tambah ') + config.title;
+
+      fieldsWrap.innerHTML = config.fields.map((f) => renderField(f, row[f.name])).join('');
+      bindNumericInputs(fieldsWrap);
+      modal.classList.add('open');
+    }
+
+    function renderField(field, value) {
+      const fullClass = field.full ? 'full' : '';
+      const required = field.required ? 'required' : '';
+      const placeholder = field.placeholder ? `placeholder="${escapeAttr(field.placeholder)}"` : '';
+      const val = value === undefined || value === null ? '' : value;
+      if (field.type === 'textarea') {
+        return `<div class="field ${fullClass}"><label>${escapeHtml(field.label)}</label><textarea name="${escapeAttr(field.name)}" ${placeholder} ${required}>${escapeHtml(String(val))}</textarea></div>`;
+      }
+      if (field.type === 'select') {
+        let options = field.options || [];
+        if (field.source) {
+          options = (state.datasets[field.source] || []).map((row) => ({
+            value: row[field.valueKey || 'id'],
+            label: row[field.textKey || 'name']
+          }));
+        }
+        const optionHtml = ['<option value="">Pilih</option>'].concat(options.map((opt) => {
+          const selected = String(opt.value) === String(val) ? 'selected' : '';
+          return `<option value="${escapeAttr(opt.value)}" ${selected}>${escapeHtml(opt.label)}</option>`;
+        })).join('');
+        return `<div class="field ${fullClass}"><label>${escapeHtml(field.label)}</label><select name="${escapeAttr(field.name)}" ${required}>${optionHtml}</select></div>`;
+      }
+      if (field.type === 'number') {
+        const kind = inferFieldNumberKind(field);
+        const placeholder = field.placeholder || getNumberPlaceholder(kind);
+        const displayValue = val === '' ? '' : formatNumericValue(val, kind);
+        const inputMode = kind === 'currency' ? 'numeric' : 'decimal';
+        return `<div class="field ${fullClass}"><label>${escapeHtml(field.label)}</label><input type="text" class="numeric-input" data-number-kind="${escapeAttr(kind)}" inputmode="${escapeAttr(inputMode)}" name="${escapeAttr(field.name)}" value="${escapeAttr(displayValue)}" placeholder="${escapeAttr(placeholder)}" data-min="${field.min !== undefined ? field.min : ''}" data-step="${field.step !== undefined ? field.step : ''}" ${required}></div>`;
+      }
+      return `<div class="field ${fullClass}"><label>${escapeHtml(field.label)}</label><input type="${escapeAttr(field.type || 'text')}" name="${escapeAttr(field.name)}" value="${escapeAttr(String(val))}" ${placeholder} min="${field.min !== undefined ? field.min : ''}" step="${field.step !== undefined ? field.step : ''}" ${required}></div>`;
+    }
+
+    async function onSubmitEntity(event) {
+      event.preventDefault();
+      const form = event.target;
+      const module = form.module.value;
+      const data = formToObject(form);
+      delete data.module;
+
+      if (module === 'users') {
+        const passwordValidation = validatePassword(data.password);
+        if (passwordValidation !== true) {
+          showFlash(passwordValidation, true);
+          return;
+        }
+      }
+
+      try {
+        await serverCall('saveRecord', module, data, buildContext());
+        closeModal('entityModal');
+        showFlash('Data berhasil disimpan.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Gagal menyimpan data.', true);
+      }
+    }
+
+    async function removeRecord(module, id) {
+      if (!confirm('Yakin ingin menghapus data ini?')) return;
+      try {
+        await serverCall('deleteRecord', module, id, buildContext());
+        showFlash('Data berhasil dihapus.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Gagal menghapus.', true);
+      }
+    }
+
+    async function approveTransaction(id) {
+      try {
+        await serverCall('approveTransaction', id, buildContext());
+        showFlash('Transaksi berhasil di-approve.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Approve gagal.', true);
+      }
+    }
+
+    async function openCustomerHistory(customerId) {
+      try {
+        const customer = (state.datasets.customers || []).find((c) => String(c.id) === String(customerId));
+        document.getElementById('historyTitle').textContent = `Riwayat Pelanggan: ${customer ? customer.name : '-'}`;
+        const rows = await serverCall('getCustomerPurchaseHistory', customerId, buildContext());
+        const html = rows.map((row) => `<tr>
+          <td>${escapeHtml(row.timestamp || row.date || '')}</td>
+          <td>${escapeHtml(row.cashier || '-')}</td>
+          <td>${money(row.total)}</td>
+          <td><span class="chip ${String(row.status).toLowerCase() === 'approved' ? 'approved' : 'pending'}">${escapeHtml(row.status || '-')}</span></td>
+        </tr>`).join('');
+        setTable('historyBody', html);
+        openModal('historyModal');
+      } catch (error) {
+        showFlash(error.message || 'Gagal membuka riwayat.', true);
+      }
+    }
+
+    function updateTransactionSummary() {
+      const categories = mapById(state.datasets.categories);
+      const selectedCustomerId = document.getElementById('trxCustomer').value;
+      const customer = (state.datasets.customers || []).find((c) => String(c.id) === String(selectedCustomerId));
+      const discountPercent = Number(customer ? customer.discountPercent : 0) || 0;
+
+      let subtotal = 0;
+      document.querySelectorAll('.trx-qty').forEach((input) => {
+        const body = input.closest('.product-body');
+        const unitEl = body ? body.querySelector('.trx-unit') : null;
+        const unit = normalizeUnit((unitEl && unitEl.value) || 'liter');
+        const item = categories[input.dataset.id];
+        if (!item) return;
+
+        const maxQty = getAvailableQtyByUnit(item, unit);
+        let qty = Number(input.value) || 0;
+        if (qty > maxQty) {
+          qty = maxQty;
+          input.value = qty.toFixed(2);
+        }
+
+        if (qty <= 0) return;
+        subtotal += qty * getCategoryPriceByUnit(item, unit);
+      });
+
+      const discount = subtotal * (discountPercent / 100);
+      const total = subtotal - discount;
+      const paid = getNumericInputValue(document.getElementById('trxPaid'));
+      const change = Math.max(0, paid - total);
+
+      document.getElementById('trxSubtotal').textContent = money(subtotal);
+      document.getElementById('trxDiscount').textContent = money(discount);
+      document.getElementById('trxTotal').textContent = money(total);
+      document.getElementById('trxChange').textContent = money(change);
+    }
+
+    async function saveCashierTransaction() {
+      const items = [];
+      document.querySelectorAll('.product-body').forEach((body) => {
+        const qtyInput = body.querySelector('.trx-qty');
+        const unitInput = body.querySelector('.trx-unit');
+        if (!qtyInput || !unitInput) return;
+
+        const qty = Number(qtyInput.value) || 0;
+        if (qty > 0) {
+          items.push({
+            categoryId: qtyInput.dataset.id,
+            qty: round2(qty),
+            unit: normalizeUnit(unitInput.value || 'liter')
+          });
+        }
+      });
+
+      if (!items.length) {
+        showFlash('Masukkan minimal satu kuantitas beras.', true);
+        return;
+      }
+
+      const cashPaid = getNumericInputValue(document.getElementById('trxPaid'));
+      const payload = {
+        customerId: document.getElementById('trxCustomer').value,
+        cashPaid: cashPaid,
+        items: items,
+        cashierName: state.currentUser ? state.currentUser.displayName : state.role
+      };
+
+      try {
+        await serverCall('saveTransaction', payload, buildContext());
+        showFlash('Transaksi berhasil disimpan.');
+        document.querySelectorAll('.trx-qty').forEach((input) => { input.value = '0.00'; });
+        document.querySelectorAll('.trx-unit').forEach((input) => { input.value = 'liter'; });
+        document.querySelectorAll('.product-body').forEach((body) => syncProductCardMeta(body));
+        document.getElementById('trxPaid').value = '';
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Transaksi gagal.', true);
+      }
+    }
+
+    function normalizeUnit(unit) {
+      return String(unit || '').toLowerCase() === 'liter' ? 'liter' : 'kg';
+    }
+
+    function round2(value) {
+      return Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
+    }
+
+    function getCategoryKgPerLiter(category) {
+      const value = Number(category && category.kgPerLiter);
+      return value > 0 ? value : 0.8;
+    }
+
+    function getCategoryPriceByUnit(category, unit) {
+      const safeUnit = normalizeUnit(unit);
+      const kgPerLiter = getCategoryKgPerLiter(category);
+      const literPrice = Number(category && category.pricePerLiter) || 0;
+      const kgPrice = Number(category && category.pricePerKg) || 0;
+
+      if (safeUnit === 'liter') {
+        if (literPrice > 0) return literPrice;
+        return round2(kgPrice * kgPerLiter);
+      }
+
+      if (kgPrice > 0) return kgPrice;
+      return kgPerLiter > 0 ? round2(literPrice / kgPerLiter) : 0;
+    }
+
+    function qtyToKg(category, qty, unit) {
+      const safeUnit = normalizeUnit(unit);
+      const amount = Number(qty) || 0;
+      if (safeUnit === 'kg') return round2(amount);
+      return round2(amount * getCategoryKgPerLiter(category));
+    }
+
+    function getAvailableQtyByUnit(category, unit) {
+      const stockKg = Number(category && category.stockKg) || 0;
+      const safeUnit = normalizeUnit(unit);
+      if (safeUnit === 'kg') return round2(stockKg);
+      const kgPerLiter = getCategoryKgPerLiter(category);
+      return kgPerLiter > 0 ? round2(stockKg / kgPerLiter) : 0;
+    }
+
+    function formatStockForUnit(category, unit) {
+      const safeUnit = normalizeUnit(unit);
+      const stock = getAvailableQtyByUnit(category, safeUnit);
+      return `${num(stock)} ${safeUnit}`;
+    }
+
+    function syncProductCardMeta(body) {
+      if (!body) return;
+      const id = body.dataset.productId;
+      const category = (state.datasets.categories || []).find((row) => String(row.id) === String(id));
+      if (!category) return;
+
+      const unitEl = body.querySelector('.trx-unit');
+      const qtyEl = body.querySelector('.trx-qty');
+      const priceEl = body.querySelector('[data-product-price]');
+      const stockEl = body.querySelector('[data-product-stock]');
+      const unit = normalizeUnit(unitEl ? unitEl.value : 'liter');
+
+      if (priceEl) {
+        priceEl.textContent = `Harga: ${money(getCategoryPriceByUnit(category, unit))} / ${unit}`;
+      }
+
+      if (stockEl) {
+        stockEl.textContent = `Stok: ${formatStockForUnit(category, unit)}`;
+      }
+
+      if (qtyEl) {
+        qtyEl.step = '0.01';
+        qtyEl.max = String(getAvailableQtyByUnit(category, unit));
+      }
+    }
+
+    async function onSubmitSettings(event) {
+      event.preventDefault();
+      const data = formToObject(event.target);
+      data.id = (state.datasets.settings || {}).id || data.id || '';
+      try {
+        await serverCall('saveRecord', 'settings', data, buildContext());
+        showFlash('Setting toko berhasil disimpan.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Gagal simpan setting.', true);
+      }
+    }
+
+    async function onDeleteSetting() {
+      const settings = state.datasets.settings || {};
+      if (!settings.id) return;
+      if (!confirm('Hapus setting toko saat ini?')) return;
+      try {
+        await serverCall('deleteRecord', 'settings', settings.id, buildContext());
+        showFlash('Setting berhasil dihapus.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Gagal menghapus setting.', true);
+      }
+    }
+
+    async function onManualBackup() {
+      const note = prompt('Catatan backup manual (opsional):', '') || '';
+      try {
+        await serverCall('createBackup', 'MANUAL', note, buildContext());
+        showFlash('Backup manual berhasil dibuat.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+        setActivePage('backups');
+      } catch (error) {
+        showFlash(error.message || 'Backup manual gagal.', true);
+      }
+    }
+
+    async function onSetupAutoBackup() {
+      try {
+        const result = await serverCall('setupAutoBackupTrigger', buildContext());
+        showFlash(result.message || 'Auto backup tahunan berhasil diaktifkan.');
+      } catch (error) {
+        showFlash(error.message || 'Gagal mengaktifkan auto backup.', true);
+      }
+    }
+
+    async function onRestoreBackup(backupId) {
+      if (!confirm('Restore akan menimpa data saat ini. Lanjutkan?')) return;
+      try {
+        await serverCall('restoreBackup', backupId, buildContext());
+        showFlash('Restore backup berhasil. Data telah diperbarui.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Restore backup gagal.', true);
+      }
+    }
+
+    async function loadReport(period, unit) {
+      try {
+        const safePeriod = period || 'daily';
+        const safeUnit = (unit || 'kg').toLowerCase() === 'liter' ? 'liter' : 'kg';
+        const report = await serverCall('getReportData', safePeriod, safeUnit, buildContext());
+        state.reportPeriod = safePeriod;
+        state.reportUnit = report.unit || safeUnit;
+        document.getElementById('reportRange').textContent = `Periode: ${report.startDate} s.d ${report.endDate}`;
+        document.getElementById('reportSales').textContent = money(report.totalSales || 0);
+        document.getElementById('reportProfit').textContent = money(report.totalProfit || 0);
+        document.getElementById('reportTransactions').textContent = num(report.totalTransactions || 0);
+        document.getElementById('reportQty').textContent = `${num(report.totalQty || 0)} ${state.reportUnit}`;
+        document.getElementById('reportPeriod').textContent = String(report.period || '').toUpperCase();
+        document.getElementById('reportUnitSelect').value = state.reportUnit;
+
+        const topRows = (report.topCategories || []).map((row) => (
+          `<tr><td>${escapeHtml(row.name)}</td><td>${num(row.totalQty || 0)}</td><td>${escapeHtml(row.unit || state.reportUnit)}</td><td>${money(row.totalSales)}</td></tr>`
+        )).join('');
+        setTable('tableTopCategories', topRows);
+      } catch (error) {
+        showFlash(error.message || 'Gagal memuat laporan.', true);
+      }
+    }
+
+    function onReportUnitChange(event) {
+      const unit = (event.target.value || 'kg').toLowerCase() === 'liter' ? 'liter' : 'kg';
+      state.reportUnit = unit;
+      loadReport(state.reportPeriod, state.reportUnit);
+    }
+
+    function printReport() {
+      window.print();
+    }
+
+    function onRoleChange(event) {
+      if (state.userRole !== 'Admin') {
+        event.target.value = state.role;
+        return;
+      }
+      const role = event.target.value;
+      loadApp(role, state.currentUser && state.currentUser.id);
+    }
+
+    function onProfileClick(event) {
+      const actionBtn = event.target.closest('[data-profile-action]');
+      if (!actionBtn) {
+        document.getElementById('profileMenu').classList.toggle('open');
+        return;
+      }
+
+      const action = actionBtn.dataset.profileAction;
+      document.getElementById('profileMenu').classList.remove('open');
+
+      if (action === 'detail') {
+        const user = state.currentUser || {};
+        showFlash(`User: ${user.displayName || '-'} | Role User: ${state.userRole || state.role} | Role Aktif: ${state.role} | Email: ${user.email || '-'}`);
+      }
+
+      if (action === 'edit') {
+        const user = state.currentUser || {};
+        const form = document.getElementById('profileForm');
+        form.id.value = user.id || '';
+        form.displayName.value = user.displayName || '';
+        form.email.value = user.email || '';
+        form.avatarUrl.value = user.avatarUrl || '';
+        document.getElementById('profileModalTitle').textContent = `Edit Profil (${user.role || state.role})`;
+        openModal('profileModal');
+      }
+
+      if (action === 'logout') {
+        serverCall('logout').finally(() => {
+          setStoredRole('Guest');
+          setStoredUserId('');
+          state.pendingRestorePage = '';
+          showLoginScreen();
+          refreshCaptcha();
+        });
+      }
+    }
+
+    async function onSubmitProfile(event) {
+      event.preventDefault();
+      const data = formToObject(event.target);
+      const passwordValidation = validatePassword(data.password);
+      if (passwordValidation !== true) {
+        showFlash(passwordValidation, true);
+        return;
+      }
+      data.avatarUrl = normalizeImageUrl_(data.avatarUrl, 320, '');
+      try {
+        await serverCall('updateProfile', data, buildContext());
+        closeModal('profileModal');
+        showFlash('Profil berhasil diperbarui.');
+        await loadApp(state.role, state.currentUser && state.currentUser.id);
+      } catch (error) {
+        showFlash(error.message || 'Gagal update profil.', true);
+      }
+    }
+
+    function onSearch(event) {
+      const q = String(event.target.value || '').trim().toLowerCase();
+      const activePage = document.getElementById(`page-${state.activePage}`);
+      if (!activePage) return;
+
+      activePage.querySelectorAll('tbody tr, .product').forEach((row) => {
+        if (!q) {
+          row.style.display = '';
+          return;
+        }
+        const text = String(row.dataset.search || row.textContent || '').toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function buildContext() {
+      return {
+        role: state.role,
+        userId: state.currentUser ? state.currentUser.id : '',
+        userName: state.currentUser ? state.currentUser.displayName : state.role
+      };
+    }
+
+    function canAction(action, module) {
+      const map = state.permissions || {};
+      const list = map[action] || [];
+      return list.includes('*') || list.includes(module);
+    }
+
+    function bindNumericInputs(root) {
+      const scope = root || document;
+      scope.querySelectorAll('input[data-number-kind]').forEach((input) => {
+        const kind = input.dataset.numberKind || 'decimal';
+        input.classList.add('numeric-input');
+        if (!input.placeholder) {
+          input.placeholder = getNumberPlaceholder(kind);
+        }
+
+        if (input.value && document.activeElement !== input) {
+          input.value = formatNumericValue(input.value, kind);
+        }
+
+        if (input.dataset.numericBound === '1') return;
+        input.dataset.numericBound = '1';
+
+        input.addEventListener('focus', () => {
+          const raw = parseNumericValue(input.value, kind);
+          if (!String(input.value || '').trim()) return;
+          if (kind === 'currency') {
+            input.value = String(Math.round(raw));
+          } else {
+            input.value = String(raw).replace('.', ',');
+          }
+        });
+
+        input.addEventListener('input', () => {
+          if (kind === 'currency') {
+            const digits = String(input.value || '').replace(/[^\d-]/g, '');
+            if (!digits || digits === '-') {
+              input.value = '';
+              return;
+            }
+            const numVal = Number(digits);
+            input.value = Number.isFinite(numVal) ? formatNumericValue(numVal, kind) : '';
+            return;
+          }
+          input.value = String(input.value || '').replace(/[^0-9,.\-]/g, '');
+        });
+
+        input.addEventListener('blur', () => {
+          const rawText = String(input.value || '').trim();
+          if (!rawText) return;
+          input.value = formatNumericValue(rawText, kind);
+        });
+      });
+    }
+
+    function inferFieldNumberKind(field) {
+      if (field && field.numberKind) return field.numberKind;
+      const key = String(field && field.name || '').toLowerCase();
+      if (/price|cost|amount|balance|target|paid|total|buyprice/.test(key)) return 'currency';
+      if (/discount|percent/.test(key)) return 'percent';
+      return 'decimal';
+    }
+
+    function getNumberPlaceholder(kind) {
+      if (kind === 'currency') return 'Contoh: 150.000';
+      if (kind === 'percent') return 'Contoh: 2,50';
+      return 'Contoh: 12,50';
+    }
+
+    function parseNumericValue(value, kind) {
+      const mode = kind || 'decimal';
+      const raw = String(value === undefined || value === null ? '' : value).trim();
+      if (!raw) return 0;
+
+      if (mode === 'currency') {
+        const digits = raw.replace(/[^\d-]/g, '');
+        if (!digits || digits === '-') return 0;
+        const parsedCurrency = Number(digits);
+        return Number.isFinite(parsedCurrency) ? Math.round(parsedCurrency) : 0;
+      }
+
+      let cleaned = raw.replace(/[^\d,.\-]/g, '');
+      if (!cleaned || cleaned === '-' || cleaned === ',' || cleaned === '.') return 0;
+
+      const hasComma = cleaned.includes(',');
+      const hasDot = cleaned.includes('.');
+
+      if (hasComma && hasDot) {
+        if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) {
+          cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+        } else {
+          cleaned = cleaned.replace(/,/g, '');
+        }
+      } else if (hasComma) {
+        const commaParts = cleaned.split(',');
+        if (commaParts.length === 2 && commaParts[1].length === 3 && commaParts[0].length <= 3) {
+          cleaned = commaParts.join('');
+        } else {
+          cleaned = cleaned.replace(',', '.');
+        }
+      } else if (hasDot) {
+        const dotParts = cleaned.split('.');
+        if (dotParts.length > 2) {
+          const decimal = dotParts.pop();
+          cleaned = dotParts.join('') + '.' + decimal;
+        } else if (dotParts.length === 2 && dotParts[1].length === 3 && dotParts[0].length <= 3) {
+          cleaned = dotParts.join('');
+        }
+      }
+
+      const parsed = Number(cleaned);
+      if (!Number.isFinite(parsed)) return 0;
+      return round2(parsed);
+    }
+
+    function formatNumericValue(value, kind) {
+      const mode = kind || 'decimal';
+      const parsed = parseNumericValue(value, mode);
+      if (mode === 'currency') {
+        return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(Math.round(parsed));
+      }
+      return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(parsed);
+    }
+
+    function getNumericInputValue(input) {
+      if (!input) return 0;
+      const kind = input.dataset.numberKind || 'decimal';
+      return parseNumericValue(input.value, kind);
+    }
+
+    function setNumericInputDisplay(input, value) {
+      if (!input) return;
+      const kind = input.dataset.numberKind || 'decimal';
+      const hasValue = value !== undefined && value !== null && String(value).trim() !== '';
+      input.value = hasValue ? formatNumericValue(value, kind) : '';
+    }
+
+    function formToObject(form) {
+      const data = {};
+      new FormData(form).forEach((value, key) => {
+        data[key] = value;
+      });
+
+      form.querySelectorAll('input[data-number-kind]').forEach((input) => {
+        if (!input.name) return;
+        const raw = String(input.value || '').trim();
+        data[input.name] = raw === '' ? '' : parseNumericValue(raw, input.dataset.numberKind || 'decimal');
+      });
+
+      return data;
+    }
+
+    function mapById(rows) {
+      const out = {};
+      (rows || []).forEach((r) => {
+        out[r.id] = r;
+      });
+      return out;
+    }
+
+    function searchBlob(row) {
+      return Object.values(row || {}).join(' ').replace(/[\"'<>`]/g, ' ');
+    }
+
+    function extractDriveFileId_(value) {
+      const raw = String(value || '').trim();
+      if (!raw) return '';
+
+      const driveIdPrefix = raw.match(/^driveid:([a-zA-Z0-9_-]{20,})$/i);
+      if (driveIdPrefix && driveIdPrefix[1]) return driveIdPrefix[1];
+
+      const drivePrefix = raw.match(/^drive:([a-zA-Z0-9_-]{20,})$/i);
+      if (drivePrefix && drivePrefix[1]) return drivePrefix[1];
+
+      const directId = raw.match(/^[a-zA-Z0-9_-]{20,}$/);
+      if (directId) return directId[0];
+
+      const filePathMatch = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/i);
+      if (filePathMatch && filePathMatch[1]) return filePathMatch[1];
+
+      const ucPathMatch = raw.match(/\/uc\?[^#]*[?&]id=([a-zA-Z0-9_-]+)/i);
+      if (ucPathMatch && ucPathMatch[1]) return ucPathMatch[1];
+
+      const thumbnailMatch = raw.match(/\/thumbnail\?[^#]*[?&]id=([a-zA-Z0-9_-]+)/i);
+      if (thumbnailMatch && thumbnailMatch[1]) return thumbnailMatch[1];
+
+      const queryIdMatch = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/i);
+      if (queryIdMatch && queryIdMatch[1]) return queryIdMatch[1];
+
+      return '';
+    }
+
+    function normalizeImageUrl_(value, width, fallbackUrl) {
+      const fallback = String(fallbackUrl || '').trim();
+      const raw = String(value || '').trim();
+      const source = raw || fallback;
+      if (!source) return '';
+
+      const driveId = extractDriveFileId_(source);
+      if (driveId) {
+        const safeWidth = Math.max(120, Number(width || 1200));
+        return `https://drive.google.com/thumbnail?id=${encodeURIComponent(driveId)}&sz=w${safeWidth}`;
+      }
+
+      // If user enters unresolved drive command (ex: drive:nama-file.jpg), fallback to safe URL.
+      if (/^drive(id)?:/i.test(source)) {
+        return fallback;
+      }
+      return source;
+    }
+
+    function num(value) {
+      return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 }).format(Number(value || 0));
+    }
+
+    function money(value) {
+      return 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(Number(value || 0));
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, '&#96;');
+    }
+
+    function showFlash(message, isError) {
+      const el = document.getElementById('flashMessage');
+      el.textContent = message;
+      el.style.background = isError ? '#8e2f2f' : '#203319';
+      el.classList.add('show');
+      // setTimeout(() => el.classList.remove('show'), 2600);
+    }
+
+    function serverCall(method, ...args) {
+      return new Promise((resolve, reject) => {
+        const runner = google.script.run
+          .withSuccessHandler(resolve)
+          .withFailureHandler((err) => {
+            const msg = err && err.message ? err.message : String(err);
+            reject(new Error(msg));
+          });
+        runner[method](...args);
+      });
+    }
+
+    function getStoredRole() {
+      return localStorage.getItem('kioskberas_role') || 'Admin';
+    }
+
+    function setStoredRole(role) {
+      localStorage.setItem('kioskberas_role', role || 'Admin');
+    }
+
+    function getStoredUserId() {
+      return localStorage.getItem('kioskberas_user') || '';
+    }
+
+    function setStoredUserId(userId) {
+      if (userId) {
+        localStorage.setItem('kioskberas_user', userId);
+      } else {
+        localStorage.removeItem('kioskberas_user');
+      }
+    }
+
+    function getStoredSidebarState() {
+      return localStorage.getItem('kioskberas_sidebar_hidden') === '1';
+    }
+
+    function setStoredSidebarState(hidden) {
+      localStorage.setItem('kioskberas_sidebar_hidden', hidden ? '1' : '0');
+    }
+
+    function getStoredLastPage() {
+      return localStorage.getItem('kioskberas_last_page') || '';
+    }
+
+    function setStoredLastPage(page) {
+      if (!page) return;
+      localStorage.setItem('kioskberas_last_page', page);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

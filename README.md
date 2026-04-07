@@ -223,6 +223,7 @@ kiosk-gs/           # Google Apps Script version
 ├── Code.gs         # Backend logic
 ├── Index.html      # Main UI
 ├── appsscript.json # Project config
+├── assets/         # All assets such as images, etc
 ├── database/       # Schema files
 └── README-EMBED.md
 ```
